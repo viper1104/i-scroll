@@ -60,7 +60,11 @@
 		wheelDeltaY *= (this.options.invertWheelDirection * this.options.mouseWheelSpeedFactor);
 
 		if ( !this.hasVerticalScroll ) {
-			wheelDeltaX = wheelDeltaY;
+			// Trackpad horizontal swipe sends deltaX; mouse wheel sends deltaY.
+			// Keep deltaX when present, otherwise map deltaY (legacy behavior).
+			if ( !wheelDeltaX ) {
+				wheelDeltaX = wheelDeltaY;
+			}
 			wheelDeltaY = 0;
 		}
 

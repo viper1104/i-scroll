@@ -1,4 +1,4 @@
-/*! iScroll v5.2.0-snapshot ~ (c) 2008-2022 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.2.0-snapshot ~ (c) 2008-2026 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -1196,7 +1196,11 @@ IScroll.prototype = {
 		wheelDeltaY *= (this.options.invertWheelDirection * this.options.mouseWheelSpeedFactor);
 
 		if ( !this.hasVerticalScroll ) {
-			wheelDeltaX = wheelDeltaY;
+			// Trackpad horizontal swipe sends deltaX; mouse wheel sends deltaY.
+			// Keep deltaX when present, otherwise map deltaY (legacy behavior).
+			if ( !wheelDeltaX ) {
+				wheelDeltaX = wheelDeltaY;
+			}
 			wheelDeltaY = 0;
 		}
 
