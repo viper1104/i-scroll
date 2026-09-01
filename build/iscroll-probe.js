@@ -1,4 +1,4 @@
-/*! iScroll v5.2.0-snapshot ~ (c) 2008-2022 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.2.0-snapshot ~ (c) 2008-2026 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -523,7 +523,7 @@ IScroll.prototype = {
 			pos = this.getComputedPosition();
 			this._translate(Math.round(pos.x), Math.round(pos.y));
 			this._execEvent('scrollEnd', e);
-		} else if ( !this.options.useTransition && this.isAnimating ) {
+		} else if (!this.options.useTransition && this.isAnimating) {
 			this.isAnimating = false;
 			this._execEvent('scrollEnd', e);
 		}
@@ -897,7 +897,7 @@ IScroll.prototype = {
 			return;
 		}
 
-		for ( ; i < l; i++ ) {
+		for (; i < l; i++) {
 			this._events[type][i].apply(this, [].slice.call(arguments, 1).concat(event));
 		}
 	},
@@ -1320,7 +1320,11 @@ IScroll.prototype = {
 		wheelDeltaY *= (this.options.invertWheelDirection * this.options.mouseWheelSpeedFactor);
 
 		if ( !this.hasVerticalScroll ) {
-			wheelDeltaX = wheelDeltaY;
+			// Trackpad horizontal swipe sends deltaX; mouse wheel sends deltaY.
+			// Keep deltaX when present, otherwise map deltaY (legacy behavior).
+			if ( !wheelDeltaX ) {
+				wheelDeltaX = wheelDeltaY;
+			}
 			wheelDeltaY = 0;
 		}
 
@@ -1374,7 +1378,7 @@ IScroll.prototype = {
 
 	_initSnap: function () {
 		this.currentPage = {};
-
+		
 		if ( typeof this.options.snap == 'string' ) {
 			this.options.snapSelector = this.options.snap;
 		} else {
@@ -1398,7 +1402,7 @@ IScroll.prototype = {
 			if ( !this.wrapperWidth || !this.wrapperHeight || !this.scrollerWidth || !this.scrollerHeight ) {
 				return;
 			}
-
+			
 			this._querySnapElements();
 
 			if ( this.options.snap === true ) {
@@ -1489,7 +1493,7 @@ IScroll.prototype = {
 			);
 		});
 	},
-
+		
 	_querySnapElements: function() {
 		if (typeof this.options.snapSelector == 'string') {
 			this.options.snap = this.scroller.querySelectorAll(this.options.snapSelector);
