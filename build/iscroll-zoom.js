@@ -1694,6 +1694,12 @@ IScroll.prototype = {
 			}
 		}
 
+		// Position before every snap centre: loop ends with i == pages.length
+		if ( i === l ) {
+			i = l - 1;
+			x = this.pages[i][0].x;
+		}
+
 		l = this.pages[i].length;
 
 		for ( ; m < l; m++ ) {
@@ -1701,6 +1707,11 @@ IScroll.prototype = {
 				y = this.pages[0][m].y;
 				break;
 			}
+		}
+
+		if ( m === l ) {
+			m = l - 1;
+			y = this.pages[0][m].y;
 		}
 
 		if ( i == this.currentPage.pageX ) {
